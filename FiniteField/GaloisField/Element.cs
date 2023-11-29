@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FiniteField.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,22 +9,12 @@ namespace FiniteField.GaloisField
 {
     public static class Field
     {
-        public const int M = 163;
-        public static bool[] Generator { get; }
+        public const int M = 491;
+        public static readonly int[] GeneratorDegrees = { 0,2,6,17,491 };
 
-        public static readonly int[] GeneratorDegrees = { 0,3,6,7,163 };
-        static Field()
-        {
-            Generator = new bool[M + 1];
-            Generator[0] = true;
-            Generator[3] = true;
-            Generator[6] = true;
-            Generator[7] = true;
-            Generator[163] = true;
-        }
         internal static int PolynomDegree(bool[] input)
         {
-            for(int i = 0; i < input.Length; i--)
+            for(int i = input.Length - 1; i >= 0; i--)
             {
                 if (input[i])
                 {
@@ -32,23 +23,24 @@ namespace FiniteField.GaloisField
             }
             return -1;
         }
+
         internal static bool[] Modulo(bool[] input)
         {
             int degree = PolynomDegree(input);
             if (degree < M)
             {
-                return new bool[M];
+                return input;
             }
             while (degree >= M)
             {
                 foreach(var gen in GeneratorDegrees)
                 {
-                    input[degree - 163 + gen] = input[degree - 163 + gen] ^ true; 
+                    input[degree - M + gen] = input[degree - M + gen] ^ true; 
                 }
                 degree = PolynomDegree(input);
             }
             bool[] output = new bool[M];
-            Array.Copy(input, M, output, 0,M);
+            Array.Copy(input, 0, output, 0,M);
             return output;
         }
     }
@@ -59,13 +51,18 @@ namespace FiniteField.GaloisField
         internal bool[] Data { get; }
 
         public Element()
-        { 
+        {
             Data = new bool[Field.M];
         }
         public Element(bool[] data)
         {
             Data = data;
         }
+        public Element(Element element)
+        {
+            Data = element.Data;
+        }
+        
 
         public static Element operator + (Element left, Element right)
         {
@@ -77,21 +74,59 @@ namespace FiniteField.GaloisField
             return output;
         }
 
+        public static Element operator << (Element left, int shift)
+        {
+            Element output = new();
+            for(int i = 0; i < Field.M - shift; i++)
+            {
+                output[i + shift] = left[i];
+            }
+            return output;
+        }
+
         public static Element operator * (Element left, Element right)
         {
-            bool[] temp = new bool[2*Field.M];
-            for(int i = 0; i < Field.M; i++)
+            bool[] temp = new bool[2 * Field.M - 1];
+            for (int i = 0; i < Field.M; i++)
             {
-                for(int j = 0; j < Field.M; i++)
+                for (int j = 0; j < Field.M; j++)
                 {
-                    temp[i + j] = left[i] ^ right[j];
+                    temp[i + j] ^= left[i] & right[j];
                 }
             }
             bool[] output = Field.Modulo(temp);
             return new Element(output);
         }
 
-
+        public Element ToSquare()
+        {
+            bool[] temp = new bool[2 * Field.M - 1];
+            for (int i = 0; i < Field.M; i++)
+            {
+                temp[i * 2] = this[i];
+            }
+            bool[] output = Field.Modulo(temp);
+            return new Element(output);
+        }
+        public bool Trace()
+        {
+            Element temp = new(this);
+            Element output = new();
+            for (int i = 0; i < Field.M; i++)
+            {
+                temp = temp.ToSquare();
+                output += temp;
+            }
+            return output[0];
+        }
+        public override string ToString()
+        {
+            return Convertor.ToBinary(this);
+        }
+        public string ToHexString()
+        {
+            return Convertor.ToHex(this);
+        }
         public bool this[int i]
         {
             get { return Data[i]; }
