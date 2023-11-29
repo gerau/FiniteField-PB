@@ -27,10 +27,6 @@ namespace FiniteField.GaloisField
         internal static bool[] Modulo(bool[] input)
         {
             int degree = PolynomDegree(input);
-            if (degree < M)
-            {
-                return input;
-            }
             while (degree >= M)
             {
                 foreach(var gen in GeneratorDegrees)
@@ -42,6 +38,16 @@ namespace FiniteField.GaloisField
             bool[] output = new bool[M];
             Array.Copy(input, 0, output, 0,M);
             return output;
+        }
+        public static Element One()
+        {
+            Element output = new();
+            output[0] = true;
+            return output;
+        }
+        public static Element Zero()
+        {
+            return new Element();
         }
     }
 
@@ -94,8 +100,7 @@ namespace FiniteField.GaloisField
                     temp[i + j] ^= left[i] & right[j];
                 }
             }
-            bool[] output = Field.Modulo(temp);
-            return new Element(output);
+            return new Element(Field.Modulo(temp));
         }
 
         public Element ToSquare()
@@ -116,6 +121,23 @@ namespace FiniteField.GaloisField
             {
                 temp = temp.ToSquare();
                 output += temp;
+            }
+            return output;
+        }
+        public Element Pow(Element power)
+        {
+            Element output = Field.One();
+            for(int i = Field.M - 1; i > 0; i--)
+            {
+                if (power[i])
+                {
+                    output *= this;
+                }
+                output = output.ToSquare();
+            }
+            if (power[0])
+            {
+                output *= this;
             }
             return output;
         }
