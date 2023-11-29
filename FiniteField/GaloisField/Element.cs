@@ -108,7 +108,7 @@ namespace FiniteField.GaloisField
             bool[] output = Field.Modulo(temp);
             return new Element(output);
         }
-        public bool Trace()
+        public Element Trace()
         {
             Element temp = new(this);
             Element output = new();
@@ -117,7 +117,7 @@ namespace FiniteField.GaloisField
                 temp = temp.ToSquare();
                 output += temp;
             }
-            return output[0];
+            return output;
         }
         public override string ToString()
         {
