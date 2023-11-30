@@ -36,7 +36,10 @@ namespace FiniteField.GaloisField
                 degree = PolynomDegree(input);
             }
             bool[] output = new bool[M];
-            Array.Copy(input, 0, output, 0,M);
+            for(int i = 0; i < Field.M; i++)
+            {
+                output[i] = input[i];
+            }
             return output;
         }
         public static Element One()
@@ -97,7 +100,7 @@ namespace FiniteField.GaloisField
             {
                 for (int j = 0; j < Field.M; j++)
                 {
-                    temp[i + j] ^= left[i] & right[j];
+                    temp[i + j] ^= left.Data[i] & right.Data[j];
                 }
             }
             return new Element(Field.Modulo(temp));
@@ -140,6 +143,18 @@ namespace FiniteField.GaloisField
                 output *= this;
             }
             return output;
+        }
+        public Element InverseElement()
+        {
+            Element temp = new(this);
+            Element output = Field.One();
+            for(int i = 0; i < Field.M - 1; i++)
+            {
+                temp = temp.ToSquare();
+                output *= temp;
+            }
+            return output; 
+
         }
         public override string ToString()
         {
