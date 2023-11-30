@@ -52,6 +52,15 @@ namespace FiniteField.GaloisField
         {
             return new Element();
         }
+        public static Element MaxValue()
+        {
+            Element output = new();
+            for(int i = 0; i < M; i++)
+            {
+                output[i] = true;
+            }
+            return output;
+        }
     }
 
 
@@ -104,6 +113,21 @@ namespace FiniteField.GaloisField
                 }
             }
             return new Element(Field.Modulo(temp));
+        }
+        public static bool operator == (Element left, Element right)
+        {
+            for(int i = 0; i < Field.M; i++)
+            {
+                if (left[i]^right[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool operator != (Element left, Element right)
+        {
+            return !(left == right);
         }
 
         public Element ToSquare()
@@ -169,6 +193,5 @@ namespace FiniteField.GaloisField
             get { return Data[i]; }
             set { Data[i] = value; }
         }
-
     }
 }
