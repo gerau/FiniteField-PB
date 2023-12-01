@@ -70,5 +70,31 @@ namespace FiniteFieldTests
 
             Assert.That(X == Y);
         }
+        [Test]
+        public void CycleTest() 
+        {
+            Element X = A.Pow(Field.MaxValue());
+
+            Assert.That(X == Field.One());
+        }
+        [Test]
+        public void InverseElementTest()
+        {
+            if(A == Field.Zero())
+            {
+                Assert.True(true);
+            }
+            Element X = A.InverseElement();
+
+            Assert.That(X * A == Field.One());
+        }
+        [Test]
+        public void SquareTest()
+        {
+            Element X = A.ToSquare();
+            Element Y = A * A;
+
+            Assert.That(X == Y);
+        }
     }
 }
