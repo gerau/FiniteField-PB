@@ -61,6 +61,32 @@ namespace FiniteField.GaloisField
             }
             return output;
         }
+        public static (Element, Element) SolveQuadradicEquation(Element a, Element b)
+        {
+            Element output = new();
+            if (a == Field.Zero())
+            {
+                output = b.SquareRoot();
+                return (output, output);
+            }
+            if (b == Field.Zero())
+            {
+                return (a, Field.Zero());
+            }
+            Element tempA = a.ToSquare();
+            tempA = tempA.InverseElement();
+            Element C = b * tempA;
+            if (C.Trace() == Field.One())
+            {
+                throw new Exception("Solution for quadratic equation doesn't exist.");
+            }
+            else
+            {
+                output = C.HalfTrace() * a;
+                var output2 = output + a;
+                return (output, output2);
+            }
+        }
     }
 
 
@@ -143,9 +169,21 @@ namespace FiniteField.GaloisField
         public Element Trace()
         {
             Element temp = new(this);
-            Element output = new();
-            for (int i = 0; i < Field.M; i++)
+            Element output = new(temp);
+            for (int i = 0; i < Field.M - 1; i++)
             {
+                temp = temp.ToSquare();
+                output += temp;
+            }
+            return output;
+        }
+        public Element HalfTrace()
+        {
+            Element temp = new(this);
+            Element output = new(temp);
+            for (int i = 1; i < Field.M; i += 2)
+            {
+                temp = temp.ToSquare();
                 temp = temp.ToSquare();
                 output += temp;
             }
@@ -178,7 +216,13 @@ namespace FiniteField.GaloisField
                 output *= temp;
             }
             return output; 
-
+        }
+        public Element SquareRoot()
+        {
+            Element output = new(this);
+            Element power = new();
+            power[Field.M - 1] = true;
+            return output.Pow(power);
         }
         public override string ToString()
         {
