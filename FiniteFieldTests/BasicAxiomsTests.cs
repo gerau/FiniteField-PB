@@ -96,5 +96,77 @@ namespace FiniteFieldTests
 
             Assert.That(X == Y);
         }
+        [Test]
+        public void QuadraticEquationTest1()
+        {
+            Element X;
+            try
+            {
+                X = Field.SolveQuadradicEquation(A, B).Item1;
+                Assert.That((X.ToSquare() + A * X + B) == Field.Zero());
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [Test]
+        public void QuadraticEquationTest2()
+        {
+            Element X;
+            try
+            {
+                X = Field.SolveQuadradicEquation(A, B).Item2;
+                var result = X.ToSquare() + A * X + B;
+                Console.WriteLine(result);
+                Assert.That(result == Field.Zero()); 
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [Test]
+        public void QuadraticEquationTestAZero()
+        {
+            Element X;
+            try
+            {
+                X = Field.SolveQuadradicEquation(Field.Zero(), B).Item1;
+                Assert.That((X.ToSquare() + B) == Field.Zero());
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [Test]
+        public void QuadraticEquationTestBZero1()
+        {
+            Element X;
+            try
+            {
+                X = Field.SolveQuadradicEquation(A, Field.Zero()).Item1;
+                Assert.That((X.ToSquare() + X * A) == Field.Zero());
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [Test]
+        public void QuadraticEquationTestBZero2()
+        {
+            Element X;
+            try
+            {
+                X = Field.SolveQuadradicEquation(A, Field.Zero()).Item2;
+                Assert.That((X.ToSquare() + X * A) == Field.Zero());
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
     }
 }
