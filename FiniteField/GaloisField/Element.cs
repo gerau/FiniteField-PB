@@ -10,7 +10,7 @@ namespace FiniteField.GaloisField
     public static class Field
     {
         public const int M = 491;
-        public static readonly int[] GeneratorDegrees = { 0,2,6,17,491 };
+        public static readonly int[] GeneratorDegrees = { 0, 2, 6, 17, 491 }; 
 
         internal static int PolynomDegree(bool[] input)
         {
@@ -63,7 +63,7 @@ namespace FiniteField.GaloisField
         }
         public static (Element, Element) SolveQuadradicEquation(Element a, Element b)
         {
-            Element output = new();
+            Element output;
             if (a == Field.Zero())
             {
                 output = b.SquareRoot();
@@ -106,6 +106,17 @@ namespace FiniteField.GaloisField
         {
             Data = element.Data;
         }
+        public Element(string data, bool isBinary = true)
+        {
+            if (isBinary)
+            {
+                Data = Convertor.FromBinary(data).Data;
+            }
+            else
+            {
+                Data = Convertor.FromHex(data).Data;
+            }
+        }
         
 
         public static Element operator + (Element left, Element right)
@@ -113,7 +124,7 @@ namespace FiniteField.GaloisField
             Element output = new();
             for(int i = 0; i < Field.M; i++)
             {
-                output[i] = left[i] ^ right[i];
+                output.Data[i] = left.Data[i] ^ right.Data[i];
             }
             return output;
         }

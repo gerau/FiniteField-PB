@@ -119,32 +119,6 @@ namespace FiniteField.Helpers
                 output = output.Remove(0, 1);
             }
             return FromBinary(output);
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Element output = new();
-            //var temp = input;
-            //if (input[..2] == "0x")
-            //{
-            //    temp = input.Remove(0,2);
-            //}
-            //temp = temp.PadLeft(Field.M/4+1, '0');
-
-            //for(int i = 0; i < Field.M/4; i++)
-            //{
-
-            //}
-            //return output;
         }
     }
 }

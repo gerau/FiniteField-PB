@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiniteField", "FiniteField\FiniteField.csproj", "{1B61AEBC-C508-4F68-8D28-43BE0840508E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteFieldTests", "FiniteFieldTests\FiniteFieldTests.csproj", "{6BAF1DCC-DE01-424E-B622-6E6051A6F606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiniteFieldTests", "FiniteFieldTests\FiniteFieldTests.csproj", "{6BAF1DCC-DE01-424E-B622-6E6051A6F606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
